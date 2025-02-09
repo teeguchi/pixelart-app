@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>ピクセルアートアプリ</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="robots" content="noindex, nofollow">
+        <link rel="stylesheet" href="pixelart-app.css">
+    </head>
+    <body>
+        <div id="top" class="site-wrap">
+            <h1>ピクセルアートアプリ</h1>
+            <div class="main">
+                <div id="canvas-wrap">
+                    <canvas id="haikei-canvas" class=""></canvas>
+                    <canvas id="layer1" class="layer active"></canvas>
+                    <canvas id="layer2" class="layer"></canvas>
+                    <canvas id="layer3" class="layer"></canvas>
+                    <canvas id="grid-canvas" class="show">Canvas要素に対応したブラウザを利用してください。</canvas>
+                </div>
+                <div class="control-panel">
+                    <div class="scroll-btn down">
+                        <a href="#bottom" aria-label="下にスクロール" role="button">
+                            <svg version="1.1" class="arrow3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24" height="24" viewBox="50 100 200 100">
+                                <polyline class="st0" points="98.75,121.81 150,178.19 201.25,121.81 "/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="girid-settings">
+                        <span>マス目: </span>
+                        <div class="grid-size-btn-wrap">
+                            <select id="grid-size-btn">
+                                <option value="16">16x16</option>
+                                <option value="32">32x32</option>
+                                <option value="64">64x64</option>
+                                <option value="reset">最初から</option>
+                            </select>
+                        </div>
+                        <input id="disp-grid-line" class="hide-input" type="checkbox" aria-hidden="true">
+                        <label for="disp-grid-line" class="disp-label" aria-label="グリッド線の表示／非表示切り替え" role="button">
+                            <svg class="eye1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" version="1.1" viewBox="50 100 200 100">
+                                <path class="cls-1" d="M219.25,150s-31,30.5-69.25,30.5-69.25-30.5-69.25-30.5c0,0,31-30.5,69.25-30.5s69.25,30.5,69.25,30.5Z"/>
+                                <circle class="cls-2" cx="150" cy="150" r="22.5"/>
+                            </svg>
+                            <svg class="eye2" xmlns="http://www.w3.org/2000/svg" width="32" height="32" version="1.1" viewBox="50 100 200 100">
+                                <path class="cls-1" d="M89.18,213.21c-1.18,0-2.37-.46-3.25-1.39-1.72-1.79-1.66-4.64.14-6.36l122.65-117.43c1.8-1.72,4.64-1.66,6.36.14,1.72,1.8,1.66,4.64-.14,6.36l-122.65,117.43c-.87.83-1.99,1.25-3.11,1.25Z"/>
+                                <g>
+                                  <path class="cls-1" d="M159.64,130.17c-2.92-1.39-6.19-2.17-9.64-2.17-12.43,0-22.5,10.07-22.5,22.5,0,3.11.63,6.06,1.77,8.75l30.38-29.09Z"/>
+                                  <path class="cls-1" d="M140.33,170.82c2.93,1.4,6.21,2.18,9.67,2.18,12.43,0,22.5-10.07,22.5-22.5,0-3.12-.63-6.09-1.78-8.78l-30.39,29.1Z"/>
+                                </g>
+                                <g>
+                                  <path class="cls-1" d="M222.05,147.65c-.84-.83-14.06-13.63-33.83-22.69l-6.31,6.04c14.69,6.23,26.08,15.03,31.34,19.5-8.67,7.38-33.97,26.5-63.26,26.5-4.99,0-9.85-.56-14.54-1.52l-6.92,6.63c6.76,1.79,13.97,2.89,21.47,2.89,39.43,0,70.74-30.36,72.05-31.65.76-.75,1.2-1.78,1.2-2.85s-.43-2.1-1.2-2.85Z"/>
+                                  <path class="cls-1" d="M118.05,169.99c-14.67-6.23-26.05-15.02-31.31-19.49,8.67-7.38,33.97-26.5,63.26-26.5,4.97,0,9.83.56,14.51,1.51l6.93-6.63c-6.75-1.78-13.95-2.88-21.43-2.88-39.43,0-70.74,30.36-72.06,31.65-.76.75-1.19,1.78-1.19,2.85s.43,2.1,1.19,2.85c.84.83,14.04,13.61,33.8,22.68l6.31-6.04Z"/>
+                                </g>
+                            </svg>
+                        </label>
+                        <input id="grid-line-color" type="color" value="#808080" aria-label="グリッド線の色を選択">
+                    </div>
+                    <div class="edit-settings division-wrap">
+                        <div class="division-item">
+                            <label><input type="radio" name="draw-state-btn" value="draw"><span>描く</span></label>
+                            <label><input type="radio" name="draw-state-btn" value="erase"><span>消す</span></label>
+                        </div>
+                        <div class="division-item">
+                            <button id="undo-btn">戻す</button>
+                            <button id="redo-btn">直す</button>
+                        </div>
+                    </div>
+                    <div class="dot-color-settings">
+                        <div class="color-palette">
+                            <div class="palette-item">
+                                <label><input class="palette-btn" type="radio" name="palette-btn" value="1" aria-label="パレットの選択"></label>
+                                <label><input id="dot-color1" class="dot-color" type="color" value="#000000" aria-label="ドット色の選択"></label>
+                            </div>
+                            <div class="palette-item">
+                                <label><input class="palette-btn" type="radio" name="palette-btn" value="2" aria-label="パレットの選択"></label>
+                                <label><input id="dot-color2" class="dot-color" type="color" value="#000000" aria-label="ドット色の選択"></label>
+                            </div>
+                            <div class="palette-item">
+                                <label><input class="palette-btn" type="radio" name="palette-btn" value="3" aria-label="パレットの選択"></label>
+                                <label><input id="dot-color3" class="dot-color" type="color" value="#000000" aria-label="ドット色の選択"></label>
+                            </div>
+                            <div class="palette-item">
+                                <label><input class="palette-btn" type="radio" name="palette-btn" value="4" aria-label="パレットの選択"></label>
+                                <label><input id="dot-color4" class="dot-color" type="color" value="#000000"></label>
+                            </div>
+                        </div>
+                        <div class="color-palette">
+                            <div class="palette-item">
+                                <label><input class="palette-btn" type="radio" name="palette-btn" value="5" aria-label="パレットの選択"></label>
+                                <label><input id="dot-color5" class="dot-color" type="color" value="#000000" aria-label="ドット色の選択"></label>
+                            </div>
+                            <div class="palette-item">
+                                <label><input class="palette-btn" type="radio" name="palette-btn" value="6" aria-label="パレットの選択"></label>
+                                <label><input id="dot-color6" class="dot-color" type="color" value="#000000" aria-label="ドット色の選択"></label>
+                            </div>
+                            <div class="palette-item">
+                                <label><input class="palette-btn" type="radio" name="palette-btn" value="7" aria-label="パレットの選択"></label>
+                                <label><input id="dot-color7" class="dot-color" type="color" value="#000000" aria-label="ドット色の選択"></label>
+                            </div>
+                            <div class="palette-item">
+                                <label><input class="palette-btn" type="radio" name="palette-btn" value="8" aria-label="パレットの選択"></label>
+                                <label><input id="dot-color8" class="dot-color" type="color" value="#000000" aria-label="ドット色の選択"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="color-conversion division-wrap">
+                        <div class="division-item">
+                            <input id="before-color" type="color" value="#000000" aria-label="変換前の色の選択">
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" version="1.1" viewBox="75 75 150 150">
+                                    <g>
+                                        <polygon class="cls-1" points="149.71 203.8 206.5 150 149.71 96.2 149.71 128.78 93.5 128.78 93.5 171.22 149.71 171.22 149.71 203.8"/>
+                                    </g>
+                                </svg>
+                            </span>
+                            <input id="after-color" type="color" value="#000000" aria-label="変換後の色の選択">
+                        </div>
+                        <div class="division-item">
+                            <button id="convert-btn">変換</button><button id="color-clear">削除</button>
+                        </div>
+                    </div>
+                    <div class="bg-color-settings">
+                        <label>背景色: <input id="bg-color" type="color" value="#ffffff"></label>
+                        <label class="check-label"><input id="include-bgc" type="checkbox"><span>含める</span></label>
+                    </div>
+                    <div class="layer-settings">
+                        <div class="layer-panel">
+                            <button id="layer-change-btn" title="レイヤーの入れ替え" aria-label="レイヤーの入れ替え">
+                                <svg version="1.1" class="arrow2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20" height="20" viewBox="50 100 200 100">
+                                    <g>
+                                        <line class="st0" x1="150" y1="86.5" x2="150" y2="205.04"/>
+                                        <polyline class="st0" points="99.68,168.65 150,213.5 200.32,168.65 	"/>
+                                    </g>
+                                </svg>
+                            </button>
+                            <div id="layer-item-wrap">
+                                <div id="layer-item1" class="layer-item active">
+                                    <label class="item-box"><input type="radio" name="active-layer-btn" value="layer1"><span>1層</span></label>
+                                    <input id="disp-layer1" class="disp-layer-btn hide-input" type="checkbox" value="layer1" aria-hidden="true">
+                                    <label for="disp-layer1" class="disp-label" aria-label="レイヤー1の表示・非表示切り替え" role="button">
+                                        <svg class="eye1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" version="1.1" viewBox="50 100 200 100">
+                                            <path class="cls-1" d="M219.25,150s-31,30.5-69.25,30.5-69.25-30.5-69.25-30.5c0,0,31-30.5,69.25-30.5s69.25,30.5,69.25,30.5Z"/>
+                                            <circle class="cls-2" cx="150" cy="150" r="22.5"/>
+                                        </svg>
+                                        <svg class="eye2" xmlns="http://www.w3.org/2000/svg" width="32" height="32" version="1.1" viewBox="50 100 200 100">
+                                            <path class="cls-1" d="M89.18,213.21c-1.18,0-2.37-.46-3.25-1.39-1.72-1.79-1.66-4.64.14-6.36l122.65-117.43c1.8-1.72,4.64-1.66,6.36.14,1.72,1.8,1.66,4.64-.14,6.36l-122.65,117.43c-.87.83-1.99,1.25-3.11,1.25Z"/>
+                                            <g>
+                                              <path class="cls-1" d="M159.64,130.17c-2.92-1.39-6.19-2.17-9.64-2.17-12.43,0-22.5,10.07-22.5,22.5,0,3.11.63,6.06,1.77,8.75l30.38-29.09Z"/>
+                                              <path class="cls-1" d="M140.33,170.82c2.93,1.4,6.21,2.18,9.67,2.18,12.43,0,22.5-10.07,22.5-22.5,0-3.12-.63-6.09-1.78-8.78l-30.39,29.1Z"/>
+                                            </g>
+                                            <g>
+                                              <path class="cls-1" d="M222.05,147.65c-.84-.83-14.06-13.63-33.83-22.69l-6.31,6.04c14.69,6.23,26.08,15.03,31.34,19.5-8.67,7.38-33.97,26.5-63.26,26.5-4.99,0-9.85-.56-14.54-1.52l-6.92,6.63c6.76,1.79,13.97,2.89,21.47,2.89,39.43,0,70.74-30.36,72.05-31.65.76-.75,1.2-1.78,1.2-2.85s-.43-2.1-1.2-2.85Z"/>
+                                              <path class="cls-1" d="M118.05,169.99c-14.67-6.23-26.05-15.02-31.31-19.49,8.67-7.38,33.97-26.5,63.26-26.5,4.97,0,9.83.56,14.51,1.51l6.93-6.63c-6.75-1.78-13.95-2.88-21.43-2.88-39.43,0-70.74,30.36-72.06,31.65-.76.75-1.19,1.78-1.19,2.85s.43,2.1,1.19,2.85c.84.83,14.04,13.61,33.8,22.68l6.31-6.04Z"/>
+                                            </g>
+                                        </svg>
+                                    </label>
+                                </div>
+                                <div id="layer-item2" class="layer-item">
+                                    <label class="item-box"><input type="radio" name="active-layer-btn" value="layer2"><span>2層</span></label>
+                                    <input id="disp-layer2" class="disp-layer-btn hide-input" type="checkbox" value="layer2" aria-hidden="true">
+                                    <label for="disp-layer2" class="disp-label" aria-label="レイヤー2の表示・非表示切り替え" role="button">
+                                        <svg class="eye1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" version="1.1" viewBox="50 100 200 100">
+                                            <path class="cls-1" d="M219.25,150s-31,30.5-69.25,30.5-69.25-30.5-69.25-30.5c0,0,31-30.5,69.25-30.5s69.25,30.5,69.25,30.5Z"/>
+                                            <circle class="cls-2" cx="150" cy="150" r="22.5"/>
+                                        </svg>
+                                        <svg class="eye2" xmlns="http://www.w3.org/2000/svg" width="32" height="32" version="1.1" viewBox="50 100 200 100">
+                                            <path class="cls-1" d="M89.18,213.21c-1.18,0-2.37-.46-3.25-1.39-1.72-1.79-1.66-4.64.14-6.36l122.65-117.43c1.8-1.72,4.64-1.66,6.36.14,1.72,1.8,1.66,4.64-.14,6.36l-122.65,117.43c-.87.83-1.99,1.25-3.11,1.25Z"/>
+                                            <g>
+                                              <path class="cls-1" d="M159.64,130.17c-2.92-1.39-6.19-2.17-9.64-2.17-12.43,0-22.5,10.07-22.5,22.5,0,3.11.63,6.06,1.77,8.75l30.38-29.09Z"/>
+                                              <path class="cls-1" d="M140.33,170.82c2.93,1.4,6.21,2.18,9.67,2.18,12.43,0,22.5-10.07,22.5-22.5,0-3.12-.63-6.09-1.78-8.78l-30.39,29.1Z"/>
+                                            </g>
+                                            <g>
+                                              <path class="cls-1" d="M222.05,147.65c-.84-.83-14.06-13.63-33.83-22.69l-6.31,6.04c14.69,6.23,26.08,15.03,31.34,19.5-8.67,7.38-33.97,26.5-63.26,26.5-4.99,0-9.85-.56-14.54-1.52l-6.92,6.63c6.76,1.79,13.97,2.89,21.47,2.89,39.43,0,70.74-30.36,72.05-31.65.76-.75,1.2-1.78,1.2-2.85s-.43-2.1-1.2-2.85Z"/>
+                                              <path class="cls-1" d="M118.05,169.99c-14.67-6.23-26.05-15.02-31.31-19.49,8.67-7.38,33.97-26.5,63.26-26.5,4.97,0,9.83.56,14.51,1.51l6.93-6.63c-6.75-1.78-13.95-2.88-21.43-2.88-39.43,0-70.74,30.36-72.06,31.65-.76.75-1.19,1.78-1.19,2.85s.43,2.1,1.19,2.85c.84.83,14.04,13.61,33.8,22.68l6.31-6.04Z"/>
+                                            </g>
+                                        </svg>
+                                    </label>
+                                </div>
+                                <div id="layer-item3" class="layer-item">
+                                    <label class="item-box"><input type="radio" name="active-layer-btn" value="layer3"><span>3層</span></label>
+                                    <input id="disp-layer3" class="disp-layer-btn hide-input" type="checkbox" value="layer3" aria-hidden="true">
+                                    <label for="disp-layer3" class="disp-label" aria-label="レイヤー3の表示・非表示切り替え" role="button">
+                                        <svg class="eye1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" version="1.1" viewBox="50 100 200 100">
+                                            <path class="cls-1" d="M219.25,150s-31,30.5-69.25,30.5-69.25-30.5-69.25-30.5c0,0,31-30.5,69.25-30.5s69.25,30.5,69.25,30.5Z"/>
+                                            <circle class="cls-2" cx="150" cy="150" r="22.5"/>
+                                        </svg>
+                                        <svg class="eye2" xmlns="http://www.w3.org/2000/svg" width="32" height="32" version="1.1" viewBox="50 100 200 100">
+                                            <path class="cls-1" d="M89.18,213.21c-1.18,0-2.37-.46-3.25-1.39-1.72-1.79-1.66-4.64.14-6.36l122.65-117.43c1.8-1.72,4.64-1.66,6.36.14,1.72,1.8,1.66,4.64-.14,6.36l-122.65,117.43c-.87.83-1.99,1.25-3.11,1.25Z"/>
+                                            <g>
+                                              <path class="cls-1" d="M159.64,130.17c-2.92-1.39-6.19-2.17-9.64-2.17-12.43,0-22.5,10.07-22.5,22.5,0,3.11.63,6.06,1.77,8.75l30.38-29.09Z"/>
+                                              <path class="cls-1" d="M140.33,170.82c2.93,1.4,6.21,2.18,9.67,2.18,12.43,0,22.5-10.07,22.5-22.5,0-3.12-.63-6.09-1.78-8.78l-30.39,29.1Z"/>
+                                            </g>
+                                            <g>
+                                              <path class="cls-1" d="M222.05,147.65c-.84-.83-14.06-13.63-33.83-22.69l-6.31,6.04c14.69,6.23,26.08,15.03,31.34,19.5-8.67,7.38-33.97,26.5-63.26,26.5-4.99,0-9.85-.56-14.54-1.52l-6.92,6.63c6.76,1.79,13.97,2.89,21.47,2.89,39.43,0,70.74-30.36,72.05-31.65.76-.75,1.2-1.78,1.2-2.85s-.43-2.1-1.2-2.85Z"/>
+                                              <path class="cls-1" d="M118.05,169.99c-14.67-6.23-26.05-15.02-31.31-19.49,8.67-7.38,33.97-26.5,63.26-26.5,4.97,0,9.83.56,14.51,1.51l6.93-6.63c-6.75-1.78-13.95-2.88-21.43-2.88-39.43,0-70.74,30.36-72.06,31.65-.76.75-1.19,1.78-1.19,2.85s.43,2.1,1.19,2.85c.84.83,14.04,13.61,33.8,22.68l6.31-6.04Z"/>
+                                            </g>
+                                        </svg>
+                                    </label>
+                                </div>
+                            </div><!-- /layer-item-wrap -->
+                            <button id="layer-merge-btn" title="レイヤーの統合" aria-label="レイヤーの統合">
+                                <svg version="1.1" class="arrow2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20" height="20" viewBox="50 100 200 100">
+                                    <g>
+                                        <line class="st0" x1="150" y1="86.5" x2="150" y2="205.04"/>
+                                        <polyline class="st0" points="99.68,168.65 150,213.5 200.32,168.65 	"/>
+                                    </g>
+                                </svg>
+                                <svg version="1.1" class="plus" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20" height="20" viewBox="75 100 150 150">
+                                    <g>
+                                        <line class="st0" x1="116.05" y1="150" x2="183.95" y2="150"/>
+                                        <line class="st0" x1="150" y1="183.95" x2="150" y2="116.05"/>
+                                    </g>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <div class="action-itme">
+                            <a id="download-img-btn" title="画像" href="" download="" aria-label="画像のダウンロード" role="button">
+                                <svg id="koko" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32" height="32" viewBox="25 0 250 250">
+                                    <g>
+                                        <path class="st0" d="M52.01,211.23c0,0,55.17-159.72,131.97,0"/>
+                                        <path class="st0" d="M152.63,154.63c0,0,49.16-59.11,94.38,56.59"/>
+                                        <rect x="46.14" y="84.84" class="st0" width="207.73" height="130.32"/>
+                                    </g>
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="action-itme">
+                            <a id="export-btn" title="保存" href="" download="" aria-label="JSONファイルをダウンロード" role="button">
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32" height="32" viewBox="50 80 200 100">
+                                    <g>
+                                        <line class="st0" x1="150" y1="170.41" x2="150" y2="100.49"/>
+                                        <polyline class="st0" points="179.57,146.76 150,175.07 120.43,146.76 	"/>
+                                        <line class="st0" x1="106.09" y1="199.51" x2="193.91" y2="199.51"/>
+                                    </g>
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="action-itme">
+                            <label for="import-btn" class="custom-file" title="読み込み" aria-label="JSONファイルをアップロード" role="button">
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32" height="32" viewBox="50 80 200 100">
+                                    <g>
+                                        <line class="st0" x1="150" y1="105.15" x2="150" y2="175.07"/>
+                                        <polyline class="st0" points="179.57,128.8 150,100.49 120.43,128.8 	"/>
+                                        <line class="st0" x1="106.09" y1="199.51" x2="193.91" y2="199.51"/>
+                                    </g>
+                                </svg>
+                            </label>
+                            <input id="import-btn" type="file" accept=".json" aria-hidden="true">
+                        </div>
+                        <div class="action-itme">
+                            <label for="expt-op" class="bgimg-label" title="その他" aria-label="その他の設定" role="button">
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32" height="32" viewBox="30 10 235 235">
+                                    <g>
+                                        <path class="st0" d="M226.83,161.59v-23.19l-21.8-1.15c-1.38-5.99-3.75-11.8-7.11-17.16l14.61-16.23l-16.4-16.4l-16.23,14.61c-5.37-3.36-11.17-5.73-17.16-7.11l-1.15-21.8h-23.19l-1.15,21.8c-5.99,1.38-11.79,3.75-17.16,7.11l-16.23-14.61l-16.4,16.4l14.61,16.23c-3.36,5.37-5.73,11.17-7.11,17.16l-21.8,1.15v23.19l21.8,1.15c1.38,5.99,3.75,11.79,7.11,17.16l-14.61,16.23l16.4,16.4l16.23-14.61c5.37,3.36,11.17,5.73,17.16,7.11l1.15,21.8h23.19l1.15-21.8c5.99-1.38,11.79-3.75,17.16-7.11l16.23,14.61l16.4-16.4l-14.61-16.23c3.36-5.37,5.73-11.17,7.11-17.16L226.83,161.59z"/>
+                                        <circle class="st0" cx="150" cy="150" r="32.87"/>
+                                    </g>
+                                </svg>
+                            </label>
+                            <input id="expt-op" type="button" aria-hidden="true">
+                        </div>
+                        <div class="action-itme">
+                            <a class="help-page" href="https://teeguchi.com/" title="詳細ページへ" aria-label="詳細ページへ行く">
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32" height="32" viewBox="40 22 220 220">
+                                    <g>
+                                        <circle class="st0" cx="150" cy="150" r="75.03"/>
+                                            <path class="st0" d="M128.3,131.87c-0.09-0.67-0.14-1.35-0.14-2.04c0-9.87,9.78-17.87,21.84-17.87s21.84,8,21.84,17.87c0,9.87-9.78,19.81-21.84,19.81v18.51"/>
+                                        <circle class="st0" cx="151" cy="183.45" r="4.6"/>
+                                    </g>
+                                </svg>
+                            </a>
+                        </div>
+                        <div id="expt-menu" class="">
+                            <ul>
+                                <li><input id="ins-haikei" type="file" accept="image/*" aria-label="背景画像をアップロード"></li>
+                                <li><input id="disp-haikei" type='checkbox'><label for="disp-haikei"><span>背景画像を表示</span></label></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="scroll-btn up">
+                        <a href="#top" aria-label="上にスクロール" role="button">
+                            <svg version="1.1" class="arrow4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24" height="24" viewBox="50 100 200 100">
+                                <polyline class="st0" points="201.25,178.19 150,121.81 98.75,178.19 "/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="bottom" class="footer">
+            <small>© 2025 <a href="https://teeguchi.com/">TeeGuchi</a></small>
+        </div>
+        <script src="pixelart-app.js"></script>
+        <!-- ver. 1.0.0 -->
+    </body>
+</html>
